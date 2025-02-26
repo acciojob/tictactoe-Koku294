@@ -1,16 +1,132 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: auto;
+            width: 320px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border: 1px solid black;
+            background-color: pink;
+            cursor: pointer;
+        }
+        .winner {
+            background-color: purple !important;
+            color: white;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
-
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div id="setup">
+            <label>Player 1: <input type="text" id="player-1" placeholder="Enter name"></label><br><br>
+            <label>Player 2: <input type="text" id="player-2" placeholder="Enter name"></label><br><br>
+            <button id="submit">Start Game</button>
+        </div>
+        <div id="game" style="display: none;">
+            <h2 class="message"></h2>
+            <div class="board" id="board"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("submit").addEventListener("click", function() {
+            let player1 = document.getElementById("player-1").value;
+            let player2 = document.getElementById("player-2").value;
+            
+            if (!player1 || !player2) {
+                alert("Please enter names for both players.");
+                return;
+            }
+            
+            document.getElementById("setup").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            startGame(player1, player2);
+        });
+        
+        function startGame(player1, player2) {
+            let currentPlayer = player1;
+            let symbol = "X";
+            document.querySelector(".message").innerText = `${currentPlayer}, you're up`;
+            
+            const board = document.getElementById("board");
+            board.innerHTML = "";
+            let cells = [];
+            
+            for (let i = 1; i <= 9; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.id = i;
+                cell.addEventListener("click", function() {
+                    if (!cell.innerText) {
+                        cell.innerText = symbol;
+                        cells[i - 1] = symbol;
+                        if (checkWinner(cells, symbol)) {
+                            document.querySelector(".message").innerText = `${currentPlayer}, congratulations you won!`;
+                            highlightWinner(cells, symbol);
+                            disableBoard();
+                            return;
+                        }
+                        currentPlayer = currentPlayer === player1 ? player2 : player1;
+                        symbol = symbol === "X" ? "O" : "X";
+                        document.querySelector(".message").innerText = `${currentPlayer}, you're up`;
+                    }
+                });
+                board.appendChild(cell);
+            }
+        }
+        
+        function checkWinner(cells, symbol) {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winningCombos.some(combo => 
+                combo.every(index => cells[index] === symbol)
+            );
+        }
+        
+        function highlightWinner(cells, symbol) {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            
+            winningCombos.forEach(combo => {
+                if (combo.every(index => cells[index] === symbol)) {
+                    combo.forEach(index => {
+                        document.getElementById(index + 1).classList.add("winner");
+                    });
+                }
+            });
+        }
+        
+        function disableBoard() {
+            document.querySelectorAll(".cell").forEach(cell => cell.style.pointerEvents = "none");
+        }
+    </script>
 </body>
-
 </html>

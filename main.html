@@ -41,8 +41,8 @@
     <div class="container">
         <h1>Tic Tac Toe</h1>
         <div id="setup">
-            <label>Player 1: <input type="text" id="player-1" placeholder="Enter name"></label><br><br>
-            <label>Player 2: <input type="text" id="player-2" placeholder="Enter name"></label><br><br>
+            <label>Player 1: <input type="text" id="player1" placeholder="Enter name"></label><br><br>
+            <label>Player 2: <input type="text" id="player2" placeholder="Enter name"></label><br><br>
             <button id="submit">Start Game</button>
         </div>
         <div id="game" style="display: none;">
@@ -52,8 +52,8 @@
     </div>
     <script>
         document.getElementById("submit").addEventListener("click", function() {
-            let player1 = document.getElementById("player-1").value;
-            let player2 = document.getElementById("player-2").value;
+            let player1 = document.getElementById("player1").value;
+            let player2 = document.getElementById("player2").value;
             
             if (!player1 || !player2) {
                 alert("Please enter names for both players.");
